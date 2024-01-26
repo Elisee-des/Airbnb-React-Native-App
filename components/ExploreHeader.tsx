@@ -10,45 +10,59 @@ import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native";
 import { Link } from "expo-router";
 import Colors from "@/constants/Colors";
+import * as Haptics from "expo-haptics";
 
-const ExploreHeader = () => {
+const categories = [
+  {
+    name: "Tiny homes",
+    icon: "home",
+  },
+  {
+    name: "Cabins",
+    icon: "house-siding",
+  },
+  {
+    name: "Trending",
+    icon: "local-fire-department",
+  },
+  {
+    name: "Play",
+    icon: "videogame-asset",
+  },
+  {
+    name: "City",
+    icon: "apartment",
+  },
+  {
+    name: "Beachfront",
+    icon: "beach-access",
+  },
+  {
+    name: "Countryside",
+    icon: "nature-people",
+  },
+];
+
+interface Props {
+  onCategoryChanged: (category: string) => void;
+}
+
+const ExploreHeader = ({ onCategoryChanged }: Props) => {
+  const scrollRef = useRef<ScrollView>(null);
   const itemRef = useRef<Array<TouchableOpacity | null>>([]);
-  const [activeIndex, setActiveIndex] = useState(6);
+  const [activeIndex, setActiveIndex] = useState(1);
 
   const selectCategory = (index: number) => {
+    const selected = itemRef.current[index];
     setActiveIndex(index);
-  };
 
-  const categories = [
-    {
-      name: "Tiny homes",
-      icon: "home",
-    },
-    {
-      name: "Cabins",
-      icon: "house-siding",
-    },
-    {
-      name: "Trending",
-      icon: "local-fire-department",
-    },
-    {
-      name: "Play",
-      icon: "videogame-asset",
-    },
-    {
-      name: "City",
-      icon: "apartment",
-    },
-    {
-      name: "Beachfront",
-      icon: "beach-access",
-    },
-    {
-      name: "Countryside",
-      icon: "nature-people",
-    },
-  ];
+    selected?.measure((x) => {
+      scrollRef.current?.scrollTo({ x: x - 16, y: 0, animated: true });
+    });
+
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    onCategoryChanged(categories[index].name);
+  };
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
@@ -73,11 +87,12 @@ const ExploreHeader = () => {
         </View>
 
         <ScrollView
+          ref={scrollRef}
           horizontal
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={{
             alignItems: "center",
-            gap: 20,
+            gap: 30,
             paddingHorizontal: 16,
           }}
         >
