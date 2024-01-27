@@ -3,7 +3,7 @@ import React, { useMemo, useState } from "react";
 import { Link, Stack } from "expo-router";
 import ExploreHeader from "@/components/ExploreHeader";
 import Listings from "@/components/Listings";
-import listingsData from "@/data/airbnb-listings.json";
+import listingsData from "@/assets/data/airbnb-listings.json";
 
 const Page = () => {
   const [category, setCategory] = useState("Timy homes");
