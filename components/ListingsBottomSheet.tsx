@@ -1,22 +1,22 @@
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
-import React, { useMemo, useRef, useState } from "react";
-import { Listing } from "@/interfaces/listing";
+import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
+import { useMemo, useRef, useState } from "react";
 import BottomSheet from "@gorhom/bottom-sheet";
-import Listings from "./Listings";
-import Colors from "@/constants/Colors";
+import Listings from "@/components/Listings";
 import { Ionicons } from "@expo/vector-icons";
+import Colors from "@/constants/Colors";
 
 interface Props {
-  listings: Listing[];
+  listings: any[];
   category: string;
 }
 
+// Bottom sheet that wraps our Listings component
 const ListingsBottomSheet = ({ listings, category }: Props) => {
+  const snapPoints = useMemo(() => ["10%", "100%"], []);
   const bottomSheetRef = useRef<BottomSheet>(null);
-  const [refresh, setRefresh] = useState(0);
-  const snapPoint = useMemo(() => ["10%", "100%"], []);
+  const [refresh, setRefresh] = useState<number>(0);
 
-  const showMap = () => {
+  const onShowMap = () => {
     bottomSheetRef.current?.collapse();
     setRefresh(refresh + 1);
   };
@@ -25,13 +25,15 @@ const ListingsBottomSheet = ({ listings, category }: Props) => {
     <BottomSheet
       ref={bottomSheetRef}
       index={1}
-      snapPoints={snapPoint}
+      snapPoints={snapPoints}
       enablePanDownToClose={false}
+      handleIndicatorStyle={{ backgroundColor: Colors.grey }}
+      style={styles.sheetContainer}
     >
-      <View style={{ flex: 1 }}>
-        <Listings listings={listings} category={category} refresh={refresh} />
+      <View style={styles.contentContainer}>
+        <Listings listings={listings} refresh={refresh} category={category} />
         <View style={styles.absoluteView}>
-          <TouchableOpacity onPress={showMap} style={styles.btn}>
+          <TouchableOpacity onPress={onShowMap} style={styles.btn}>
             <Text style={{ fontFamily: "mon-sb", color: "#fff" }}>Map</Text>
             <Ionicons
               name="map"

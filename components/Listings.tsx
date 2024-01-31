@@ -13,6 +13,10 @@ import { StyleSheet } from "react-native";
 import { Listing } from "@/interfaces/listing";
 import { Ionicons } from "@expo/vector-icons";
 import Animated, { FadeInRight, FadeOutLeft } from "react-native-reanimated";
+import {
+  BottomSheetFlatList,
+  BottomSheetFlatListMethods,
+} from "@gorhom/bottom-sheet";
 
 interface Props {
   listings: any[];
@@ -22,7 +26,7 @@ interface Props {
 
 const Listings = ({ listings: items, category, refresh }: Props) => {
   const [loading, setLoading] = useState(false);
-  const listRef = useRef<FlatList>(null);
+  const listRef = useRef<BottomSheetFlatListMethods>(null);
 
   useEffect(() => {
     if (refresh) {
@@ -31,7 +35,6 @@ const Listings = ({ listings: items, category, refresh }: Props) => {
   }, [refresh]);
 
   useEffect(() => {
-    console.log("RELOAD LISTING : ", items.length);
     setLoading(true);
 
     setTimeout(() => {
@@ -80,10 +83,13 @@ const Listings = ({ listings: items, category, refresh }: Props) => {
 
   return (
     <View style={defaultStyles.container}>
-      <FlatList
+      <BottomSheetFlatList
         renderItem={renderRow}
         ref={listRef}
         data={loading ? [] : items}
+        ListHeaderComponent={
+          <Text style={styles.info}>{items.length} homes</Text>
+        }
       />
     </View>
   );

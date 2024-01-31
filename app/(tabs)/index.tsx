@@ -11,22 +11,21 @@ import ListingsBottomSheet from "@/components/ListingsBottomSheet";
 const Page = () => {
   const [category, setCategory] = useState<string>("Tiny homes");
   const items = useMemo(() => listingsData as any, []);
+  const geoItem = useMemo(() => listingsDataGeo as any, []);
   const onDataChanged = (category: string) => {
     // console.log("CHANGE CATEGORIE", category);
     setCategory(category);
   };
 
   return (
-    <View style={{ flex: 1, marginTop: 180 }}>
+    <View style={{ flex: 1, marginTop: 80 }}>
       <Stack.Screen
         options={{
           header: () => <ExploreHeader onCategoryChanged={onDataChanged} />,
         }}
       />
 
-      <Listings listings={items} category={category} refresh={0} />
-
-      <ListingsMap listings={listingsDataGeo} />
+      <ListingsMap listings={geoItem} />
 
       <ListingsBottomSheet listings={items} category={category} />
     </View>
