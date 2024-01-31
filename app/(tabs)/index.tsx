@@ -6,9 +6,10 @@ import Listings from "@/components/Listings";
 import listingsData from "@/assets/data/airbnb-listings.json";
 import listingsDataGeo from "@/assets/data/airbnb-listings.geo.json";
 import ListingsMap from "@/components/ListingsMap";
+import ListingsBottomSheet from "@/components/ListingsBottomSheet";
 
 const Page = () => {
-  const [category, setCategory] = useState("Timy homes");
+  const [category, setCategory] = useState<string>("Tiny homes");
   const items = useMemo(() => listingsData as any, []);
   const onDataChanged = (category: string) => {
     // console.log("CHANGE CATEGORIE", category);
@@ -23,9 +24,11 @@ const Page = () => {
         }}
       />
 
-      {/* <Listings listings={items} category={category} /> */}
+      <Listings listings={items} category={category} refresh={0} />
 
       <ListingsMap listings={listingsDataGeo} />
+
+      <ListingsBottomSheet listings={items} category={category} />
     </View>
   );
 };
